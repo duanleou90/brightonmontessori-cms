@@ -1,0 +1,29 @@
+services:
+  sql:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    environment:
+      ACCEPT_EULA: "Y"
+      MSSQL_SA_PASSWORD: "Your_password123"
+    ports:
+      - "1433:1433"
+    volumes:
+      - mssql_data:/var/opt/mssql
+
+  web:
+    build:
+      context: .
+    image: brightonmontessori-cms:local
+    depends_on:
+      - sql
+    environment:
+      ASPNETCORE_ENVIRONMENT: "Development"
+      ConnectionStrings__umbracoDbDSN: "Server=sql,1433;Database=umbraco;User Id=sa;Password=Your_password123;TrustServerCertificate=True;Encrypt=False"
+      ConnectionStrings__umbracoDbDSN_ProviderName: "Microsoft.Data.SqlClient"
+    ports:
+      - "8443:8443"
+    volumes:
+      - ${USERPROFILE}/.aspnet/https:/https:ro
+
+volumes:
+  mssql_data:
+

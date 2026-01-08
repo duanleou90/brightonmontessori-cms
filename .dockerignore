@@ -1,0 +1,23 @@
+# Build outputs
+**/bin/
+**/obj/
+
+# Tooling / IDE
+.vs/
+.vscode/
+**/*.user
+**/*.suo
+
+# Git
+.git/
+.gitignore
+
+# OS / misc
+Thumbs.db
+Desktop.ini
+
+# Umbraco runtime data (keep it out of images; mount volumes if needed)
+App_Data/
+umbraco/Data/
+umbraco/Logs/
+umbraco/Media/
