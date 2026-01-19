@@ -13,6 +13,7 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
 var umbraco = builder.CreateUmbracoBuilder()
     .AddBackOffice()
     .AddWebsite()
+    .AddDeliveryApi()
     .AddComposers();
 
 // Enable Azure Blob storage providers only when configured.
