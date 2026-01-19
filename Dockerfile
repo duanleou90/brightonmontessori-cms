@@ -20,10 +20,8 @@ WORKDIR /app
 # Azure Web App for Containers will forward traffic to the port you listen on.
 # HTTP on 8080 for production (Azure handles TLS termination)
 # HTTPS on 8443 for local development with Umbraco backoffice
-ENV ASPNETCORE_URLS="http://+:8080;https://+:8443"
-ENV ASPNETCORE_Kestrel__Certificates__Default__Password="devcert"
-ENV ASPNETCORE_Kestrel__Certificates__Default__Path="/https/aspnetapp.pfx"
-EXPOSE 8080 8443
+ENV ASPNETCORE_URLS="http://+:8080"
+EXPOSE 8080
 
 COPY --from=build /app/publish ./
 
