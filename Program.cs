@@ -10,6 +10,39 @@ builder.Services.Configure<ForwardedHeadersOptions>(options =>
     options.KnownProxies.Clear();
 });
 
+// CORS (primarily for the Delivery API / public APIs)
+var corsAllowedOrigins =
+    builder.Configuration.GetSection("Cors:AllowedOrigins").Get<string[]>() ?? Array.Empty<string>();
+var corsAllowAnyOrigin =
+    builder.Configuration.GetValue("Cors:AllowAnyOrigin", builder.Environment.IsDevelopment());
+var corsAllowCredentials =
+    builder.Configuration.GetValue("Cors:AllowCredentials", false);
+
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("PublicApiCors", policy =>
+    {
+        policy
+            .AllowAnyHeader()
+            .AllowAnyMethod();
+
+        if (corsAllowAnyOrigin)
+        {
+            // Note: AllowAnyOrigin cannot be combined with credentials.
+            policy.AllowAnyOrigin();
+        }
+        else if (corsAllowedOrigins.Length > 0)
+        {
+            policy.WithOrigins(corsAllowedOrigins);
+
+            if (corsAllowCredentials)
+            {
+                policy.AllowCredentials();
+            }
+        }
+    });
+});
+
 var umbraco = builder.CreateUmbracoBuilder()
     .AddBackOffice()
     .AddWebsite()
@@ -48,6 +81,12 @@ if (app.Environment.IsDevelopment())
 
 await app.BootUmbracoAsync();
 
+// Apply CORS only to public API routes (avoid opening the backoffice cross-origin)
+app.UseWhen(
+    ctx =>
+        ctx.Request.Path.StartsWithSegments("/umbraco/delivery/api") ||
+        ctx.Request.Path.StartsWithSegments("/api"),
+    branch => branch.UseCors("PublicApiCors"));
 
 app.UseUmbraco()
     .WithMiddleware(u =>
