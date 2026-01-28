@@ -6,12 +6,12 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 WORKDIR /src
 
 # Copy project file and restore first (better layer caching)
-COPY brightonmontessori-cms.csproj ./
-RUN dotnet restore "./brightonmontessori-cms.csproj"
+COPY umbraco-1710-instance.csproj ./
+RUN dotnet restore "./umbraco-1710-instance.csproj"
 
 # Copy everything else and publish
 COPY . ./
-RUN dotnet publish "./brightonmontessori-cms.csproj" -c Release -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "./umbraco-1710-instance.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0 AS final
@@ -25,4 +25,4 @@ EXPOSE 8080
 
 COPY --from=build /app/publish ./
 
-ENTRYPOINT ["dotnet", "brightonmontessori-cms.dll"]
+ENTRYPOINT ["dotnet", "umbraco-1710-instance.dll"]

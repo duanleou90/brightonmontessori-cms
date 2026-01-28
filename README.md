@@ -1,4 +1,4 @@
-# brightonmontessori-cms
+# umbraco-1710-instance
 
 Umbraco CMS running in Docker, ready for Azure Web App for Containers.
 
@@ -14,7 +14,7 @@ Umbraco CMS running in Docker, ready for Azure Web App for Containers.
 ### 1. Build the Docker image
 
 ```powershell
-docker build -t brightonmontessori-cms:local .
+docker build -t umbraco-1710-instance:local .
 ```
 
 ### 2. Generate HTTPS certificate (one-time)
@@ -34,7 +34,7 @@ dotnet dev-certs https --trust
 docker run --rm -it -p 8443:8443 `
   -e ASPNETCORE_ENVIRONMENT=Development `
   -v $env:USERPROFILE\.aspnet\https:/https:ro `
-  brightonmontessori-cms:local
+  umbraco-1710-instance:local
 ```
 
 **CMD:**
@@ -42,7 +42,7 @@ docker run --rm -it -p 8443:8443 `
 docker run --rm -it -p 8443:8443 ^
   -e ASPNETCORE_ENVIRONMENT=Development ^
   -v %USERPROFILE%\.aspnet\https:/https:ro ^
-  brightonmontessori-cms:local
+  umbraco-1710-instance:local
 ```
 
 ### 4. Access the backoffice
@@ -53,12 +53,12 @@ Open **https://localhost:8443/umbraco** and complete the Umbraco setup wizard.
 
 ## Running with Docker Desktop UI
 
-1. Go to **Images** → find `brightonmontessori-cms:local` → click **Run**
+1. Go to **Images** → find `umbraco-1710-instance:local` → click **Run**
 2. Expand **Optional settings** and configure:
 
 | Setting | Value |
 |---------|-------|
-| **Container name** | `brightonmontessori-cms` |
+| **Container name** | `umbraco-1710-instance` |
 | **Host port** | `8443` |
 | **Container port** | `8443` |
 
@@ -107,7 +107,7 @@ docker run --rm -it -p 8443:8443 `
   -e "Umbraco__Storage__AzureBlob__Media__ConnectionString=DefaultEndpointsProtocol=https;AccountName=YOUR-ACCOUNT;AccountKey=YOUR-KEY;EndpointSuffix=core.windows.net" `
   -e "Umbraco__Storage__AzureBlob__Media__ContainerName=media" `
   -v $env:USERPROFILE\.aspnet\https:/https:ro `
-  brightonmontessori-cms:local
+  umbraco-1710-instance:local
 ```
 
 > **Important:** Do NOT wrap values in quotes when setting environment variables. The value should start directly with the content (e.g., `Server=tcp:...` not `"Server=tcp:..."`).

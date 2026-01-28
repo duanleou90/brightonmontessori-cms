@@ -12,7 +12,7 @@ services:
   web:
     build:
       context: .
-    image: brightonmontessori-cms:local
+    image: umbraco-1710-instance:local
     depends_on:
       - sql
     environment:
